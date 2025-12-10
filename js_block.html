@@ -55,10 +55,46 @@
     //図形の輪郭を描画
     ctx.closePath();
 
+    //変数(Variable)の宣言(declaration)
+    let x = canvas.width / 2;
+    let y = canvas.height-30;
+    let dx = 2;     //xの差分(differencial, delta)
+    let dy = -2;
+
+
+    function drawBall()
+    {
+        ctx.beginPath();
+        ctx.arc(x, y, 10, 0, Math.PI*2);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+    }
+    
+    //関数(function)の定義(definition)
+    function draw()
+    {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //矩形の範囲を消去(左, 上, 幅, 高さ)
+        
+        drawBall(); //関数の呼び出し・実行
+
+        x += dx;    //x = x + dx;
+        y += dy;
+    }
+    //関数を実行
+    setInterval(draw, 10);
+    //draw関数を一定間隔(10ミリ秒)で実行し続ける
 
     </script>
 </body>
 
 </html>
 
+
+コードを整える
+リファクタリング(refactering)
+
+手続き型(procedual) : 上から1行ずつ実行される
+イベント駆動型(event driven) : イベントが起こるとそこに対するプログラムが実行される
 
