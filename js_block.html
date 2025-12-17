@@ -60,12 +60,42 @@
     let y = canvas.height-30;
     let dx = 2;     //xの差分(differencial, delta)
     let dy = -2;
+    const ballRadius = 10;  //定数(Constant)
 
+    const paddleHeight = 10;
+    const paddleWidth = 75;
+    let paddleX = (canvas.width - paddleWidth) / 2;
+
+    let rightPressed = false;
+    let leftPressed = false;
+
+    //イベント(キー入力)が発生したことを検出できるようにする
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+
+    function keyDownHandler(e)
+    {
+
+    }
+    function keyUpHandler(e)
+    {
+        
+    }
+
+    function drawPaddle()
+    {
+        ctx.beginPath();
+        ctx.rect(paddleX, canvas.height - paddleHeight,
+            paddleWidth, paddleHeight);
+        ctx.fillStyle = "#0095DD";  //RRGGBB
+        ctx.fill();
+        ctx.closePath();
+    }
 
     function drawBall()
     {
         ctx.beginPath();
-        ctx.arc(x, y, 10, 0, Math.PI*2);
+        ctx.arc(x, y, ballRadius, 0, Math.PI*2);
         ctx.fillStyle = "#0095DD";
         ctx.fill();
         ctx.closePath();
@@ -78,9 +108,21 @@
         //矩形の範囲を消去(左, 上, 幅, 高さ)
         
         drawBall(); //関数の呼び出し・実行
+        drawPaddle();
+
+        //ボールの画面左右の衝突検出(Collision Detection)
+        if(x + dx > canvas.width - ballRadius || x + dx < ballRadius)
+        {   //跳ね返る(移動方向が逆転)
+            dx = -dx;
+        }
+        if(y + dy > canvas.height - ballRadius || y + dy < ballRadius)
+        {
+            dy = -dy;
+        }
 
         x += dx;    //x = x + dx;
         y += dy;
+        
     }
     //関数を実行
     setInterval(draw, 10);
