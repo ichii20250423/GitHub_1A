@@ -74,12 +74,26 @@
     document.addEventListener("keyup", keyUpHandler, false);
 
     function keyDownHandler(e)
-    {
-
+    {   //押されたキーの種類を調べる(矢印キーの右)
+        if(e.key === "Right" || e.key === "ArrowRight")
+        {   //他の場所(プログラム)でも押された状態を調べられるように変数に保存
+            rightPressed = true;
+        }
+        else if(e.key === "Left" || e.key === "ArrowLeft")
+        {
+            leftPressed = true;
+        }
     }
     function keyUpHandler(e)
     {
-        
+        if(e.key === "Right" || e.key === "ArrowRight")
+        {   //他の場所(プログラム)でも押された状態を調べられるように変数に保存
+            rightPressed = false;
+        }
+        else if(e.key === "Left" || e.key === "ArrowLeft")
+        {
+            leftPressed = false;
+        }
     }
 
     function drawPaddle()
@@ -115,9 +129,45 @@
         {   //跳ね返る(移動方向が逆転)
             dx = -dx;
         }
-        if(y + dy > canvas.height - ballRadius || y + dy < ballRadius)
-        {
+        if(y + dy > canvas.height - ballRadius)
+        {   //画面下端でのゲームオーバーのチェック
+            if(x > paddleX && x < paddleX + paddleWidth)
+            {   //ボールの中心(x)がパドルの範囲にある
+                dy = -dy;   //ボールを反射させる
+            }
+            else
+            {   //alert("表示するメッセージ") : ブラウザの警告を出す
+                alert("GAME OVER");
+                //現在のページをリロード(再読み込み)
+                document.location.reload();
+                //setInvervalでの設定をクリアする
+                clearInterval(interval);
+            }
+        }
+        else if(y + dy < ballRadius)
+        {   //画面上端でのボールの反射
             dy = -dy;
+        }
+
+        if(rightPressed)
+        {   //矢印キーの右が押されている間
+            paddleX += 7;
+            if(paddleX + paddleWidth > canvas.width)
+            {   //画面の右端から出ていたら右端ちょうどの位置に強制的に合わせる
+                paddleX = canvas.width - paddleWidth;
+            }
+            //c = Math.min(a, b)
+            //↑aとbの小さい方がcに入る
+        }
+        else if(leftPressed)
+        {   //矢印キーの左が押されている間
+            paddleX -= 7;
+            if(paddleX < 0)
+            {   //画面の左端から出ていたら左端ちょうどの位置に強制的に合わせる
+                paddleX = 0;
+            }
+            //c = Math.max(a, b)
+            //↑aとbの大きい方がcに入る
         }
 
         x += dx;    //x = x + dx;
@@ -125,13 +175,16 @@
         
     }
     //関数を実行
-    setInterval(draw, 10);
+    const interval = setInterval(draw, 10);
     //draw関数を一定間隔(10ミリ秒)で実行し続ける
 
     </script>
 </body>
 
 </html>
+
+
+状態遷移(State Transition)
 
 
 コードを整える
